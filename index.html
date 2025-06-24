@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islam Chaachaa - Anime Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts pour une typographie manga -->
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700&family=Poppins:wght@300;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            overflow-x: hidden;
+            font-family: 'Zen Maru Gothic', sans-serif;
+            background: linear-gradient(180deg, #ffccff, #99ccff, #ff9999); /* Palette anime vibrante */
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        .section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 10;
+            background: rgba(255, 204, 255, 0.3);
+            backdrop-filter: blur(12px);
+            border-bottom: 2px solid #ff99cc;
+        }
+        .sprite {
+            position: absolute;
+            pointer-events: none;
+        }
+        .cat {
+            cursor: pointer;
+            position: absolute;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            max-width: 900px;
+            width: 90%;
+            border: 2px solid #ff66cc;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .manga-text {
+            position: absolute;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: #ff3399;
+            text-transform: uppercase;
+            text-shadow: 1px 1px #000;
+            display: none;
+        }
+        /* Styles pour la section Projects */
+        .project-item {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px dashed #ff66cc; /* Séparateur entre projets */
+        }
+        .project-item:last-child {
+            border-bottom: none; /* Pas de bordure pour le dernier projet */
+        }
+        .project-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 2rem;
+        }
+        .project-title.medical {
+            color: #ff3399; /* Rose vif pour Medical Appointment */
+        }
+        .project-title.tictache {
+            color: #3399ff; /* Bleu pour TicTache */
+        }
+        .project-description {
+            font-size: 1.1rem;
+            color: #333;
+            line-height: 1.6;
+        }
+        /* Styles pour la vidéo */
+        .project-video {
+            max-width: 100%;
+            width: 100%;
+            height: auto;
+            border: 4px solid #ff66cc;
+            border-radius: 1rem;
+            box-shadow: 0 0 15px rgba(255, 102, 204, 0.5);
+            animation: pulse-border 2s infinite;
+        }
+        @keyframes pulse-border {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 102, 204, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(255, 102, 204, 0.8); }
+        }
+        /* Styles pour les screenshots */
+        .screenshot-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .screenshot {
+            max-width: 100%;
+            width: 280px;
+            height: auto;
+            border: 3px solid #ff99cc;
+            border-radius: 0.75rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .screenshot:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 153, 204, 0.7);
+        }
+        /* Media Queries pour responsivité */
+        @media (max-width: 768px) {
+            .card {
+                padding: 1.5rem;
+            }
+            .project-title {
+                font-size: 1.5rem;
+            }
+            .project-description {
+                font-size: 1rem;
+            }
+            .project-video {
+                width: 100%;
+                max-width: 500px;
+            }
+            .screenshot {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+        @media (max-width: 480px) {
+            .project-title {
+                font-size: 1.2rem;
+            }
+            .project-description {
+                font-size: 0.9rem;
+            }
+            .project-video {
+                max-width: 100%;
+            }
+            .screenshot {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar py-4">
+        <div class="container mx-auto flex justify-center space-x-8 text-white font-bold text-lg">
+            <a href="#home" class="hover:text-pink-300 transition">Home</a>
+            <a href="#skills" class="hover:text-pink-300 transition">Skills</a>
+            <a href="#projects" class="hover:text-pink-300 transition">Projects</a>
+            <a href="#contact" class="hover:text-pink-300 transition">Contact</a>
+        </div>
+    </nav>
+
+    <!-- 3D Canvas -->
+    <canvas id="scene"></canvas>
+
+    <!-- 2D Sprite Container -->
+    <div id="sprites"></div>
+
+    <!-- Sections -->
+    <section id="home" class="section">
+        <div class="card text-center">
+            <h1 class="text-5xl font-bold text-pink-600 animate-pulse">Islam Chaachaa</h1>
+            <p class="text-xl mt-4 text-gray-800">Computer Science & Networks Student</p>
+        </div>
+    </section>
+
+    <section id="skills" class="section">
+        <div class="card">
+            <h2 class="text-4xl font-bold text-purple-600">Skills</h2>
+            <div class="grid grid-cols-2 gap-4 mt-4 text-gray-800">
+                <div class="bg-pink-100 p-2 rounded">HTML / CSS / JavaScript</div>
+                <div class="bg-pink-100 p-2 rounded">PHP / MySQL</div>
+                <div class="bg-pink-100 p-2 rounded">Python (Basics)</div>
+                <div class="bg-pink-100 p-2 rounded">Java (OOP Basics)</div>
+                <div class="bg-pink-100 p-2 rounded">C / C++</div>
+                <div class="bg-pink-100 p-2 rounded">Symfony</div>
+                <div class="bg-pink-100 p-2 rounded">Spring Boot</div>
+                <div class="bg-pink-100 p-2 rounded">Django</div>
+                <div class="bg-pink-100 p-2 rounded">Git / GitHub</div>
+                <div class="bg-pink-100 p-2 rounded">Unix/Linux Systems</div>
+                <div class="bg-pink-100 p-2 rounded">Networking & Security</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="section">
+        <div class="card">
+            <h2 class="text-4xl font-bold text-blue-600 text-center">Projects</h2>
+            <div class="mt-6">
+                <div class="project-item">
+                    <h3 class="project-title medical">Medical Appointment Management System</h3>
+                    <p class="project-description">
+                        A web app for healthcare scheduling, allowing patients to book appointments and doctors to manage schedules.
+                    </p>
+                    <ul class="list-disc pl-5 mt-2 text-gray-700">
+                        <li><strong>Technologies</strong>: Java, Spring Boot, MySQL, UML, JPA/Hibernate</li>
+                        <li><strong>Features</strong>: Real-time availability, reminders, JWT authentication</li>
+                    </ul>
+                    <p class="mt-4 font-semibold text-gray-800">Video Demonstration:</p>
+                    <video controls class="mt-2 project-video">
+                        <source src="video/demo_medicare.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p class="mt-4 font-semibold text-gray-800">Screenshots:</p>
+                    <div class="screenshot-container mt-4">
+                        <img src="image/home_medicare.png" alt="Homepage" class="screenshot">
+                        <img src="image/listeMedecin_medicare.png" alt="Doctors List" class="screenshot">
+                        <img src="image/gestion_rendezVous_Medicare.png" alt="Appointment Management" class="screenshot">
+                    </div>
+                </div>
+                <div class="project-item">
+                    <h3 class="project-title tictache">TicTache: Collaborative To-Do List</h3>
+                    <p class="project-description">
+                        A web application for managing personal and group tasks, enabling real-time collaboration and productivity tracking.
+                    </p>
+                    <ul class="list-disc pl-5 mt-2 text-gray-700">
+                        <li><strong>Technologies</strong>: Django, MySQL, HTML/CSS/JS, Bootstrap, AJAX</li>
+                        <li><strong>Features</strong>: Task creation and assignment, group collaboration, real-time chat, interactive calendar, secure authentication</li>
+                    </ul>
+                    <p class="mt-4 font-semibold text-gray-800">Video Demonstration:</p>
+                    <video controls class="mt-2 project-video">
+                        <source src="video/demo_tictach.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <p class="mt-4 font-semibold text-gray-800">Screenshots:</p>
+                    <div class="screenshot-container mt-4">
+                        <img src="image/home_tictach.png" alt="Homepage" class="screenshot">
+                        <img src="image/tache_tictache.png" alt="Task Creation" class="screenshot">
+                        <img src="image/chat_tictach.png" alt="Chat Interface" class="screenshot">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section">
+        <div class="card text-center">
+            <h2 class="text-4xl font-bold text-green-600">Contact</h2>
+            <p class="mt-4 text-gray-800">
+                📧 <a href="mailto:islamchaachaa20040705@gmail.com" class="text-pink-600 hover:underline">islamchaachaa20040705@gmail.com</a><br>
+                📞 <a href="tel:+212718002716" class="text-pink-600 hover:underline">0718002716</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/examples/js/loaders/GLTFLoader.js"></script>
+
+    <!-- JavaScript -->
+    <script>
+        // Three.js Setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('scene'), antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        camera.position.set(0, 5, 30);
+
+        // Anime-inspired Lighting
+        const ambientLight = new THREE.AmbientLight(0xffe6f9, 0.7); // Doux rose pâle
+        scene.add(ambientLight);
+        const directionalLight = new THREE.DirectionalLight(0xff99cc, 0.9); // Lumière vive style anime
+        directionalLight.position.set(15, 20, 10);
+        scene.add(directionalLight);
+
+        // Fantasy Island with Cel-Shading
+        const islandGeometry = new THREE.SphereGeometry(12, 32, 32);
+        const islandMaterial = new THREE.MeshToonMaterial({ color: 0x66ff99, emissive: 0x33cc66 }); // Look cel-shaded
+        const island = new THREE.Mesh(islandGeometry, islandMaterial);
+        island.position.set(0, -8, 0);
+        scene.add(island);
+
+        // Cherry Blossom Petals
+        const petalCount = 1000; // Réduit pour mobile
+        const petalGeometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(petalCount * 3);
+        for (let i = 0; i < petalCount * 3; i += 3) {
+            positions[i] = (Math.random() - 0.5) * 60;
+            positions[i + 1] = Math.random() * 30;
+            positions[i + 2] = (Math.random() - 0.5) * 60;
+        }
+        petalGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const petalMaterial = new THREE.PointsMaterial({ color: 0xffb2ff, size: 0.2, transparent: true });
+        const petals = new THREE.Points(petalGeometry, petalMaterial);
+        scene.add(petals);
+
+        // Manga Character Sprite (Anime.js)
+        const spriteContainer = document.createElement('div');
+        spriteContainer.className = 'sprite';
+        spriteContainer.style.width = '120px';
+        spriteContainer.style.height = '240px';
+        spriteContainer.style.backgroundImage = "url('assets/manga_character.png')"; // Remplacer par sprite manga
+        spriteContainer.style.backgroundSize = 'cover';
+        spriteContainer.style.left = '20px';
+        spriteContainer.style.bottom = '20px';
+        document.getElementById('sprites').appendChild(spriteContainer);
+        anime({
+            targets: spriteContainer,
+            translateY: [-20, 20],
+            scale: [1, 1.05],
+            rotate: [0, 8],
+            loop: true,
+            direction: 'alternate',
+            easing: 'easeInOutSine',
+            duration: 1800
+        });
+
+        // Cute Cat Sprites
+        const cats = [];
+        for (let i = 0; i < 2; i++) { // Réduit à 2 pour performances mobile
+            const catSprite = document.createElement('div');
+            catSprite.className = 'sprite cat';
+            catSprite.style.width = '50px';
+            catSprite.style.height = '50px';
+            catSprite.style.backgroundImage = "url('assets/cat_sprite.png')"; // Remplacer par sprite chat kawaii
+            catSprite.style.backgroundSize = 'cover';
+            catSprite.style.left = `${80 + i * 150}px`;
+            catSprite.style.bottom = '20px';
+            document.getElementById('sprites').appendChild(catSprite);
+            cats.push(catSprite);
+            anime({
+                targets: catSprite,
+                translateX: [0, 200 * (Math.random() - 0.5)],
+                translateY: [0, 40 * Math.random()],
+                loop: true,
+                direction: 'alternate',
+                easing: 'easeInOutQuad',
+                duration: 3500
+            });
+            catSprite.addEventListener('click', () => {
+                const mangaText = document.createElement('div');
+                mangaText.className = 'manga-text';
+                mangaText.innerText = 'Nya!';
+                mangaText.style.left = `${parseInt(catSprite.style.left) + 50}px`;
+                mangaText.style.bottom = `${parseInt(catSprite.style.bottom) + 50}px`;
+                document.getElementById('sprites').appendChild(mangaText);
+                mangaText.style.display = 'block';
+                anime({
+                    targets: mangaText,
+                    translateY: -40,
+                    opacity: [1, 0],
+                    duration: 800,
+                    easing: 'easeOutExpo',
+                    complete: () => mangaText.remove()
+                });
+                anime({
+                    targets: catSprite,
+                    scale: [1, 1.2],
+                    duration: 250,
+                    direction: 'alternate'
+                });
+            });
+        }
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            island.rotation.y += 0.002;
+            petals.rotation.y += 0.001;
+            petals.position.y -= 0.01;
+            if (petals.position.y < -10) petals.position.y = 10;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Scroll Animations (GSAP)
+        gsap.utils.toArray('.section').forEach((section) => {
+            gsap.from(section.querySelector('.card'), {
+                opacity: 0,
+                y: 100,
+                scale: 0.9,
+                duration: 1,
+                ease: 'back.out(1.5)',
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 85%',
+                    end: 'bottom 15%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // Project Items Animation
+        gsap.utils.toArray('.project-item').forEach((project, index) => {
+            gsap.from(project, {
+                opacity: 0,
+                y: 80,
+                duration: 1,
+                delay: index * 0.3, // Décalage pour chaque projet
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: project,
+                    start: 'top 90%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // Video Animation (GSAP)
+        gsap.utils.toArray('.project-video').forEach(video => {
+            gsap.from(video, {
+                opacity: 0,
+                y: 40,
+                duration: 1.2,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: video,
+                    start: 'top 90%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+            gsap.to(video, {
+                y: -8,
+                duration: 1.8,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut'
+            });
+        });
+
+        // Screenshots Animation (Anime.js)
+        gsap.utils.toArray('.screenshot').forEach(screenshot => {
+            anime({
+                targets: screenshot,
+                scale: [0.8, 1],
+                opacity: [0, 1],
+                delay: anime.stagger(150, { start: 300 }),
+                duration: 600,
+                easing: 'easeOutQuad',
+                scrollTrigger: {
+                    trigger: screenshot,
+                    start: 'top 90%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+            screenshot.addEventListener('mouseenter', () => {
+                anime({
+                    targets: screenshot,
+                    rotate: [0, 4, -4, 0],
+                    duration: 800,
+                    easing: 'easeInOutSine'
+                });
+            });
+        });
+
+        // Resize Handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+          // Simple mouvement de la caméra selon la souris
+document.addEventListener('mousemove', (event) => {
+    const x = (event.clientX / window.innerWidth) * 2 - 1;
+    const y = -(event.clientY / window.innerHeight) * 2 + 1;
+    camera.position.x = x * 10;
+    camera.position.y = 5 + y * 5;
+    camera.lookAt(scene.position);
+});
+
+
+
+
+// Exemple rapide (à étoffer visuellement)
+const star = document.createElement('div');
+star.className = 'sprite star';
+star.style.backgroundImage = "url('assets/star.png')";
+star.style.width = '40px';
+star.style.height = '40px';
+star.style.left = 'calc(50% - 20px)';
+star.style.top = '100px';
+document.getElementById('sprites').appendChild(star);
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>
