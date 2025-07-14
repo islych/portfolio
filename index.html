@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Islam Chaachaa - Portfolio Développeur</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest"></script><meta name="google-site-verification" content="j20dCbmX9kOYoOLnlLgekCbInzNXoyAyXVwCwn2URAE" />
     <style>
         :root {
             --color-primary: #2563eb;
@@ -118,7 +118,7 @@
         }
         
         .mobile-close-btn {
-            display: none;
+            display: none; /* Caché par défaut */
             position: absolute;
             top: 25px;
             right: 20px;
@@ -129,6 +129,7 @@
             cursor: pointer;
             z-index: 1002;
         }
+
         
         .mobile-overlay {
             display: none;
@@ -140,7 +141,7 @@
             background-color: rgba(0, 0, 0, 0.7);
             z-index: 999;
         }
-        
+       
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, var(--color-secondary), #1e293b);
@@ -859,6 +860,10 @@
                 right: 0;
             }
             
+      .nav-links.show + .mobile-close-btn {
+           display: block;
+        }
+            
             .mobile-overlay.show {
                 display: block;
             }
@@ -943,9 +948,7 @@
                 <i class="fas fa-bars"></i>
             </button>
             
-            <button class="mobile-close-btn">
-                <i class="fas fa-times"></i>
-            </button>
+          
             
             <ul class="nav-links">
                 <li><a href="#home"><i data-lucide="home"></i> Accueil</a></li>
@@ -956,7 +959,10 @@
                 <li><a href="#contact"><i data-lucide="mail"></i> Contact</a></li>
             </ul>
         </div>
-    </nav>
+    </nav>  
+    <button class="mobile-close-btn">
+                <i class="fas fa-times"></i>
+            </button>
     
     <!-- Overlay pour menu mobile -->
     <div class="mobile-overlay"></div>
@@ -1468,28 +1474,33 @@
         
         mobileMenuBtn.addEventListener('click', () => {
             navLinks.classList.add('show');
+            mobileCloseBtn.style.display = 'block'; // Afficher uniquement quand menu ouvert
             mobileOverlay.classList.add('show');
-            document.body.style.overflow = 'hidden'; // Empêche le défilement
+            document.body.style.overflow = 'hidden';
         });
         
         mobileCloseBtn.addEventListener('click', () => {
             navLinks.classList.remove('show');
+            mobileCloseBtn.style.display = 'none'; // Cacher après fermeture
             mobileOverlay.classList.remove('show');
-            document.body.style.overflow = ''; // Rétablit le défilement
+            document.body.style.overflow = '';
         });
         
         mobileOverlay.addEventListener('click', () => {
             navLinks.classList.remove('show');
+            mobileCloseBtn.style.display = 'none'; // Cacher après fermeture
             mobileOverlay.classList.remove('show');
-            document.body.style.overflow = ''; // Rétablit le défilement
+            document.body.style.overflow = '';
         });
-        
+
+
         // Fermer le menu au clic sur un lien
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('show');
+                mobileCloseBtn.style.display = 'none'; // Cacher après fermeture
                 mobileOverlay.classList.remove('show');
-                document.body.style.overflow = ''; // Rétablit le défilement
+                document.body.style.overflow = '';
             });
         });
         
